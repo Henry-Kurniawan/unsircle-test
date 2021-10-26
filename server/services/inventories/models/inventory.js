@@ -14,10 +14,54 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Inventory.init({
-    name: DataTypes.STRING,
-    type: DataTypes.STRING,
-    stock: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Inventory name required'
+        },
+        notEmpty: {
+          msg: 'Inventory name required'
+        }
+      }
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Inventory type required'
+        },
+        notEmpty: {
+          msg: 'Inventory type required'
+        }
+      }
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Inventory stock required'
+        },
+        notEmpty: {
+          msg: 'Inventory stock required'
+        }
+      }
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Inventory price required'
+        },
+        notEmpty: {
+          msg: 'Inventory price required'
+        }
+      }
+    },
     status: DataTypes.STRING,
     OwnerId: DataTypes.INTEGER
   }, {

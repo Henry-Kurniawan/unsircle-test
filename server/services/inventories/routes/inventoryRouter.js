@@ -3,6 +3,12 @@ const InventoryController = require('../controllers/inventoryController');
 
 inventoryRouter
     .route('/')
-    .get(InventoryController.viewAll);
+    .get(InventoryController.viewAll)
+    .post(InventoryController.addIventory)
+
+inventoryRouter
+    .route('/:id')
+    .put(InventoryController.updateInventory)
+    .delete(InventoryController.deleteInventory)
 
 module.exports = inventoryRouter
