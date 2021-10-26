@@ -1,4 +1,8 @@
 const userRouter = require('express').Router();
-const EventController = require('../controllers/userController');
+const UserController = require('../controllers/userController');
+
+userRouter
+    .route('/login')
+    .post(UserController.login);
 
 module.exports = userRouter

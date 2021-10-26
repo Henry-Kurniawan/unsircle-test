@@ -4,6 +4,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const data = [
       {
+        type: "read",
+        status: "active",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
         type: "create",
         status: "active",
         createdAt: new Date(),
@@ -21,12 +27,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-      {
-        type: "read",
-        status: "active",
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
+      
     ];
 
     await queryInterface.bulkInsert('Permissions', data);
