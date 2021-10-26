@@ -19,14 +19,17 @@ class UserController {
                 });
 
             if (findUser) {
-                const validate = decode(password, findUser.password)
+                const validate = decode(password, findUser.password);
 
                 if (validate) {
+                    const permissions = findUser.Permissions.map((el) => {
+                        return el.type
+                    });
                     const data = {
                         id: findUser.id,
                         email: findUser.email,
                         name: findUser.name,
-                        Permissions: findUser.Permissions
+                        permissions
                     };
                     res.status(200).json(data);
 
@@ -35,14 +38,14 @@ class UserController {
                         name: 'LOGINERROR',
                         status: 401,
                         msg: 'Email/Password is not valid'
-                    }
+                    };
                 }
             } else {
                 throw {
                     name: 'LOGINERROR',
                     status: 401,
                     msg: 'Email/Password is not valid'
-                }
+                };
             }
         } catch (err) {
             next(err);
