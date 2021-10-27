@@ -2,7 +2,7 @@ function errorHandler(err, req, res, next) {
     // console.log(err);
     let status = 500;
     let msg = ['Internal Server Error'];
-
+    
     switch (err.name) {
         case 'SequelizeValidationError':
             status = 400;
@@ -33,7 +33,6 @@ function errorHandler(err, req, res, next) {
         default:
             break;
     }
-
   res.status(status).json({ msg })
 }
 

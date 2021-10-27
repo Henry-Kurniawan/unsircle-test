@@ -49,7 +49,7 @@ class InventoryController {
 
     static async updateInventory(req, res, next) {
         try {
-            const { name, type, stock, price, status } = req.body;
+            const { name, type, stock, price } = req.body;
             const { user_id: userId } = req.headers;
             const inventoryId = req.params.id
 
@@ -57,8 +57,7 @@ class InventoryController {
                 name,
                 type,
                 stock,
-                price,
-                status
+                price
             }
 
             let dataInventory = await Inventory.findOne({
@@ -73,8 +72,15 @@ class InventoryController {
                     returning: true,
                     individualHooks: true,
                 })
-
-                res.status(200).json(result[1][0])
+                if(!result[1][0]) {
+                    next ({
+                        name: 'FORBIDDEN',
+                        status: 403,
+                        msg: 'Not Authorized to do that',
+                    });
+                } else {
+                    res.status(200).json(result[1][0])
+                }
             } else {
                 next({
                     name: "NOTFOUND",

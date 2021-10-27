@@ -27,6 +27,7 @@ function errorHandler(err, req, res, next) {
         case 'NOTFOUND':
         case 'FORBIDDEN':
         case 'FILEVALIDATIONERROR':
+        case 'SERVICESERROR':
             status = err.status;
             msg = err.msg;
             break;
