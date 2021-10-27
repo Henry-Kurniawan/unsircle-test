@@ -8,6 +8,7 @@ inventoryRouter
 
 inventoryRouter
     .route('/:id')
+    .get(InventoryController.viewInventoryById)
     .put(InventoryController.updateInventory)
     .delete(InventoryController.deleteInventory)
 

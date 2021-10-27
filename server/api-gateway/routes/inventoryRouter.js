@@ -15,6 +15,7 @@ inventoryRouter
 
 inventoryRouter
     .route('/:id')
+    .get(authorizeRead, InventoryController.viewInventoryById)
     .put(authorizeUpdate, InventoryController.updateInventory)
     .delete(authorizeDelete, InventoryController.deleteInventory)
 

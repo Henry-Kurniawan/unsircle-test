@@ -31,6 +31,7 @@ class UserController {
                 id: data.id,
                 email: data.email,
                 name: data.name,
+                permissions: data.permissions
             };
 
             res.status(200).json(result);
