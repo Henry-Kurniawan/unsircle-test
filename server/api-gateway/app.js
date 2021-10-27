@@ -9,9 +9,7 @@ const router = require('./routes');
 const cors = require('cors');
 
 
-app.use(cors({
-    origin: 'http://localhost:4000'
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -22,7 +20,3 @@ app.get('/', (req, res) => {
 app.use(router);
 
 module.exports = app;
-
-/*
-sequelize model:generate --name Inventory --attributes name:string,type:string,stock:integer,price:integer,status:string,OwnerId:integer
-*/

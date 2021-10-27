@@ -4,7 +4,7 @@ const InventoryController = require('../controllers/inventoryController');
 inventoryRouter
     .route('/')
     .get(InventoryController.viewAll)
-    .post(InventoryController.addIventory)
+    .post(InventoryController.addInventory)
 
 inventoryRouter
     .route('/:id')

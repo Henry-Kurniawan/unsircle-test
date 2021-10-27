@@ -25,7 +25,7 @@ class InventoryController {
 
     
 
-    static async addIventory(req, res, next) {
+    static async addInventory(req, res, next) {
         try {
             const { name, type, stock, price } = req.body;
             const { user_id: userId } = req.headers;
@@ -87,8 +87,7 @@ class InventoryController {
             next(err)
         }
     }
-
-    
+ 
     static async deleteInventory(req, res, next) {
         try {
             const inventoryId = req.params.id
