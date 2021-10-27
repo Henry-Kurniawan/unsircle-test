@@ -1,63 +1,49 @@
 import React, {useState, useEffect} from "react";
-import { useDispatch } from "react-redux";
-import { useParams, useHistory } from "react-router";
-import { editItemAsync, fetchSingleItemAsync } from "../store/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useHistory } from "react-router-dom";
 import Swal from "sweetalert2"
+import { actionGetInventory, actionEditInventory } from "../store/action/actionInventories";
 
 
-export default function EditInventory({categories}) {
+export default function EditInventory() {
   const params = useParams()
-  const { id:itemId } = params
+  const { id:inventoryId } = params
   const history = useHistory()
   const dispatch = useDispatch()
 
-  const [edit_item_id, setEditItemId] = useState("");
-  const [edit_item_name, setEditItemName] = useState("");
-  const [edit_item_price, setEditItemPrice] = useState("");
-  const [edit_item_description, setEditItemDescription] = useState("");
-  const [edit_item_category, setEditItemCategory] = useState("");
+  const [edit_inventory_id, setEditInventoryId] = useState("");
+  const [edit_inventory_name, setEditInventoryName] = useState("");
+  const [edit_inventory_type, setEditInventoryType] = useState("");
+  const [edit_inventory_price, setEditInventoryPrice] = useState("");
+  const [edit_inventory_stock, setEditInventoryStock] = useState("");
 
   useEffect(() => {
-    dispatch(fetchSingleItemAsync(itemId))
-      .then((res) => res.json())
-      .then((data) => {
-        setEditItemId(data.id);
-        setEditItemName(data.name);
-        setEditItemPrice(data.price);
-        setEditItemDescription(data.description);
-        setEditItemCategory(data.CategoryId);
-      });
-  }, [dispatch, itemId])
+    dispatch(actionGetInventory(inventoryId))
+    .then((data) => {
+      setEditInventoryId(data.id)
+      setEditInventoryName(data.name);
+      setEditInventoryType(data.type);
+      setEditInventoryPrice(data.price);
+      setEditInventoryStock(data.stock);
+    })
+   
+   
+  }, [dispatch, inventoryId])
 
-  function editItemHandler() {
-    let name = edit_item_name
-    let description = edit_item_description
-    let price = edit_item_price
-    let CategoryId = edit_item_category
-    let imgUrl = document.getElementById("edit-imgUrl").files[0]
-
-    let form = new FormData()
-    form.append('name', name)
-    form.append('description', description)
-    form.append('price', price)
-    form.append('CategoryId', CategoryId)
-    if(imgUrl) {
-      form.append('imgUrl', imgUrl)
+  function editItemHandler(inventoryId) {
+    const payload = {
+      name: edit_inventory_name,
+      type: edit_inventory_type,
+      price: edit_inventory_price,
+      stock: edit_inventory_stock,
     }
-
-    dispatch(editItemAsync(form, itemId))
-      .then((res) => {
-        return res.json()
-      })
-      .then((data) => {
-        if(data.message) {
-          throw new Error(data.message)
-        }
-        setEditItemId("");
-        setEditItemName("");
-        setEditItemPrice("");
-        setEditItemDescription("");
-        setEditItemCategory("");
+  
+    dispatch(actionEditInventory(payload, inventoryId))
+      .then(() => {
+        setEditInventoryName("");
+        setEditInventoryType("");
+        setEditInventoryPrice("");
+        setEditInventoryStock("");
         history.push('/')
       })
       .catch((err) => {
@@ -76,8 +62,8 @@ export default function EditInventory({categories}) {
       style={{ height: "100vh" }}
     >
       <div class="jumbotron container">
-        <h1 class="display-4">edit New Item</h1>
-        <p class="lead text-muted">You can edit new Item here</p>
+        <h1 class="display-4">edit Inventory</h1>
+        <p class="lead text-muted">You can edit Inventory here</p>
       </div>
 
       <label htmlFor="edit-name" class="form-label mt-5">
@@ -88,24 +74,23 @@ export default function EditInventory({categories}) {
           type="text"
           id="edit-name"
           class="form-control"
-          value={edit_item_name}
-          onChange={(event) => setEditItemName(event.target.value)}
+          value={edit_inventory_name}
+          onChange={(event) => setEditInventoryName(event.target.value)}
         />
       </div>
       <div class="col-9"></div>
 
-      <label htmlFor="edit-description" class="form-label mt-5">
-        Description:{" "}
+      <label htmlFor="edit-type" class="form-label mt-5">
+        Type:{" "}
       </label>
       <div class="col-5">
         <textarea
           type="text"
-          id="edit-description"
+          id="edit-type"
           class="form-control"
-          name="description"
-          placeholder="e.g. A very solid watch"
-          value={edit_item_description}
-          onChange={(event) => setEditItemDescription(event.target.value)}
+          name="type"
+          value={edit_inventory_type}
+          onChange={(event) => setEditInventoryType(event.target.value)}
         >
           {" "}
         </textarea>
@@ -122,46 +107,31 @@ export default function EditInventory({categories}) {
           class="form-control"
           name="price"
           placeholder="e.g. 10000000"
-          value={edit_item_price}
-          onChange={(event) => setEditItemPrice(event.target.value)}
+          value={edit_inventory_price}
+          onChange={(event) => setEditInventoryPrice(event.target.value)}
         />
       </div>
       <div class="col-9"></div>
 
-      <label htmlFor="edit-category" class="form-label mt-5">
-        Category:{" "}
+      <label htmlFor="edit-stock" class="form-label mt-5">
+        Stock:{" "}
       </label>
       <div class="col-3">
-        <select
-          value={edit_item_category}
-          onChange={(event) => setEditItemCategory(event.target.value)}
-          class="form-select"
-          id="edit-category"
-        >
-          <option value=""> -- Choose a category -- </option>
-          {categories.map((category, index) => (
-            <option key={category.id} value={category.id}>
-              {" "}
-              {category.name}{" "}
-            </option>
-          ))}
-        </select>
+        <input
+          type="number"
+          id="edit-stock"
+          class="form-control"
+          name="Stock"
+          placeholder="e.g. 10000000"
+          value={edit_inventory_stock}
+          onChange={(event) => setEditInventoryStock(event.target.value)}
+        />
       </div>
       <div class="col-9"></div>
 
-      <div class="col-12">
-        <label class="form-label mt-5">Image:</label>
-        <input
-          type="file"
-          id="edit-imgUrl"
-          class="form-control-file mb-5"
-          name="imgUrl"
-        />
-      </div>
-
-      <div class="col-12">
+      <div class="col-12 mt-5">
         <button
-          onClick={() => editItemHandler(edit_item_id)}
+          onClick={() => editItemHandler(edit_inventory_id)}
           class="btn btn-primary btn-lg"
           type="button"
         >
@@ -170,7 +140,7 @@ export default function EditInventory({categories}) {
         </button>
         <button 
         onClick={() => history.push('/')}
-        class="btn btn-primary btn-lg" value="button">
+        class="btn btn-primary btn-lg mx-3" value="button">
           {" "}
           Cancel{" "}
         </button>

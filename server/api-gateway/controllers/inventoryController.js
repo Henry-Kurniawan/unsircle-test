@@ -29,6 +29,32 @@ class InventoryController {
         }  
     }
 
+    static async viewInventoryById(req, res, next) {
+        try {
+            const { id: userId } = req.currentUser;
+            const inventoryId = req.params.id;
+            const { data } = await axios({
+                method: "GET",
+                url: `${BASE_URL_INVENTORIES}/inventories/${inventoryId}`,
+                headers: {
+                    user_id: userId
+                }
+            });
+            res.status(200).json(data);
+
+        } catch (err) {
+            if(err.response.data) {
+                next ({
+                    name: "SERVICESERROR",
+                    status: err.response.status,
+                    msg: err.response.data.msg,
+                });
+            } else {
+                next(err);
+            }
+        }  
+    }
+
     
     static async addInventory(req, res, next) {
         try {

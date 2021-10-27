@@ -22,7 +22,36 @@ class InventoryController {
         }  
     }
 
-    
+    static async viewInventoryById(req, res, next) {
+        try {
+            const { user_id: userId } = req.headers;
+            const inventoryId = req.params.id;
+
+            let dataInventory = await Inventory.findOne({
+                where: {
+                    id: inventoryId,
+                    OwnerId: userId
+                },
+                order: [ ['id', 'ASC']],
+                attributes: {
+                    exclude:['createdAt', 'updatedAt']
+                }
+            });
+            if(!dataInventory) {
+                next ({
+                    name: 'FORBIDDEN',
+                    status: 403,
+                    msg: 'Not Authorized to do that',
+                });
+            } else {
+                res.status(200).json(dataInventory);
+            }
+
+
+        } catch (err) {
+            next(err);
+        }  
+    }
 
     static async addInventory(req, res, next) {
         try {

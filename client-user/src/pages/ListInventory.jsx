@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import { useHistory } from "react-router-dom"
 import { useSelector , useDispatch } from 'react-redux'
-import { actionGetInventories } from "../store/action/actionInventories";
+import { actionDeleteInventory, actionGetInventories } from "../store/action/actionInventories";
 
 export default function ListInventory() {
   const history = useHistory()
@@ -12,9 +12,18 @@ export default function ListInventory() {
   }, [dispatch])
 
   const inventories = useSelector(state => state.inventoriesState.inventories)
+  const permissions = useSelector(state => state.usersState.permissions)
 
-  function deleteItemHandler(itemId) {
-    // dispatch(deleteItemDataAsync(itemId))
+  function deleteInventoryHandler(inventoryId) {
+    dispatch(actionDeleteInventory(inventoryId))
+  }
+
+  function checkPermission(type) {
+    if(permissions.includes(type)) {
+      return true
+    } else {
+      return false
+    }
   }
 
   return (
@@ -38,17 +47,26 @@ export default function ListInventory() {
             <td> {inventory.price} </td>
             <td> {inventory.stock} </td>
             <td className="align-items-center justify-content-center text-center">
-              {/* <button 
-              onClick={() => history.push(`/edit/${item.id}`)}
-              type="button" className="btn btn-sm btn-warning mb-3">
-                update
-              </button> */}
-      
-              <button 
-              onClick={() => deleteItemHandler(inventory.id)}
-              type="button" className="btn btn-sm btn-danger mb-3">
-                delete
-              </button>
+              {
+                checkPermission("update") 
+                ? ( <button 
+                  onClick={() => history.push(`/edit/${inventory.id}`)}
+                  type="button" className="btn btn-sm btn-warning mb-3">
+                  update
+                  </button>
+                  )
+                : ""
+              }
+              {
+                checkPermission("delete") 
+                ? ( <button 
+                  onClick={() => deleteInventoryHandler(inventory.id)}
+                  type="button" className="btn btn-sm btn-danger mb-3 mx-2">
+                    delete
+                  </button>)
+                : ""
+              }
+             
             </td>
           </tr>
         ))}

@@ -7,18 +7,24 @@ import SideBar from "./components/SideBar";
 import Login from "./pages/Login";
 import ListInventory from "./pages/ListInventory";
 import AddInventory from "./pages/AddInventory";
+import EditInventory from "./pages/EditInventory";
 
-// import EditItem from "./pages/EditItem";
-// import AddUser from "./pages/AddUser";
-// import ItemIngredients from "./pages/ItemIngredients";
-// import EditIngredient from "./pages/EditIngredient";
 import PrivateRoute from "./components/PrivateRoute";
 import PrivateRouteLoggedIn from "./components/PrivateRouteLoggedIn";
 
 import { useDispatch, useSelector } from "react-redux";
+import { setUserPermissions } from "./store/action/actionUser";
+
 
 
 function App() {
+  const dispatch = useDispatch()
+
+  if(localStorage.getItem('access_token')) {
+    const payload = localStorage.getItem('permissions').split(',')
+    dispatch(setUserPermissions(payload))
+  }
+
   return (
     <>
       <Header />
@@ -37,7 +43,11 @@ function App() {
             style={{ minHeight: "100vh" }}
           > 
 
-            <PrivateRoute path="/add" exact>
+            <PrivateRoute path="/edit/:id">
+              <EditInventory />
+            </PrivateRoute>
+
+            <PrivateRoute path="/add">
               <AddInventory />
             </PrivateRoute>
             

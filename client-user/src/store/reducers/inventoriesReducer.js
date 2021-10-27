@@ -4,13 +4,15 @@ import {
   EDIT_INVENTORY,
   DELETE_INVENTORY,
   SET_LOADING_INVENTORY,
-  SET_ERROR_INVENTORY
+  SET_ERROR_INVENTORY,
+  GET_INVENTORY_DETAIL
 } from '../keys'
   
 const initialState = {
   loading: false,
   error: null,
-  inventories: []
+  inventories: [],
+  inventory: {}
 }
 
 function reducer (state = initialState, action) {
@@ -37,6 +39,9 @@ function reducer (state = initialState, action) {
     case DELETE_INVENTORY:
       let newInventories = state.inventories.filter(el => el.id !== Number(payload))
       return { ...state, inventories: newInventories }
+
+    case GET_INVENTORY_DETAIL:
+      return { ...state, inventory: payload }
 
     default:
       return state

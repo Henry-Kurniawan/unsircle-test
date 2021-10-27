@@ -4,14 +4,23 @@ import { useHistory, Link } from "react-router-dom";
 
 export default function SideBar() {
   const history = useHistory();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  // const permissions = useSelector((state) => state.usersState.permissions)
+  const permissions = useSelector((state) => state.usersState.permissions);
 
   function logoutHandler() {
-    localStorage.clear()
-    history.push('/login')
+    localStorage.clear();
+    history.push("/login");
   }
+
+  function checkPermission(type) {
+    if (permissions.includes(type)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <div id="side-bar" class="container col-2 pt-5">
       <div class="row">
@@ -28,7 +37,7 @@ export default function SideBar() {
         </div>
         <div class="col-10">
           <h6>Hello</h6>
-          <h6>{localStorage.getItem('email')} </h6>
+          <h6>{localStorage.getItem("email")} </h6>
         </div>
       </div>
 
@@ -47,21 +56,26 @@ export default function SideBar() {
               </div>
             </div>
           </li>
-          <li class="nav-item pt-1">
-            <div class="row">
-              <div class="col-2">
-                {" "}
-                <i class="fas fa-folder-plus fa-2x"></i>{" "}
-              </div>
-              <div class="col-10">
-                {" "}
-                <Link class="nav-link" to={"/add"}>
+          {checkPermission("create") ? (
+            <li class="nav-item pt-1">
+              <div class="row">
+                <div class="col-2">
                   {" "}
-                  <h6> Add New Inventory</h6>{" "}
-                </Link>
+                  <i class="fas fa-folder-plus fa-2x"></i>{" "}
+                </div>
+                <div class="col-10">
+                  {" "}
+                  <Link class="nav-link" to={"/add"}>
+                    {" "}
+                    <h6> Add New Inventory</h6>{" "}
+                  </Link>
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+          ) : (
+            ""
+          )}
+
           {/* <li class="nav-item pt-1">
             <div class="row">
               <div class="col-2">

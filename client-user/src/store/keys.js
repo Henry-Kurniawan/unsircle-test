@@ -1,4 +1,5 @@
 export const GET_INVENTORIES = 'inventories/getData'
+export const GET_INVENTORY_DETAIL = 'inventory/getData'
 export const DELETE_INVENTORY = 'inventory/deleteData'
 export const ADD_INVENTORY = 'inventory/addData'
 export const EDIT_INVENTORY = 'inventory/editData'
