@@ -1,28 +1,27 @@
+const axios = require('axios');
+
+const BASE_URL_INVENTORIES = "http://localhost:4002";
+
 class InventoryController {
-    // static async viewAll(req, res, next) {
-    //     try {
-    //         // const { userId } = req.headers;
-    //         const userId = 1;
+    static async viewAll(req, res, next) {
+        try {
+            const { id: userId } = req.currentUser
+            const { data } = await axios({
+                method: "GET",
+                url: `${BASE_URL_INVENTORIES}/inventories`,
+                headers: {
+                    user_id: userId
+                }
+            });
 
-    //         let dataInventories = await Inventory.findAll({
-    //             where: {
-    //                 OwnerId: userId
-    //             },
-    //             order: [ ['id', 'ASC']],
-    //             attributes: {
-    //                 exclude:['createdAt', 'updatedAt']
-    //             }
-    //         });
+            res.status(200).json(data);
 
-    //         res.status(200).json(dataInventories);
-
-    //     } catch (err) {
-    //         next(err);
-    //     }  
-    // }
+        } catch (err) {
+            next(err);
+        }  
+    }
 
     
-
     // static async addInventory(req, res, next) {
     //     try {
     //         const { name, type, stock, price } = req.body;

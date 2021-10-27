@@ -13,27 +13,27 @@ class UserController {
                 password
             };
 
-            let userLogin = await axios({
+            let { data } = await axios({
                 method: "POST",
                 url: `${BASE_URL_USERS}/users/login`,
                 data: payload
             });
 
             const access_token = sign({
-                id: userLogin.id,
-                email: userLogin.email,
-                name: userLogin.name,
-                permissions: userLogin.permissions
-            })
+                id: data.id,
+                email: data.email,
+                name: data.name,
+                permissions: data.permissions
+            });
 
             const result = {
                 access_token,
-                id: userLogin.id,
-                email: userLogin.email,
-                name: userLogin.name,
-            }
+                id: data.id,
+                email: data.email,
+                name: data.name,
+            };
 
-            res.status(200).json(result)
+            res.status(200).json(result);
 
         } catch (err) {
             next(err);

@@ -3,8 +3,7 @@ const { Inventory } = require("../models")
 class InventoryController {
     static async viewAll(req, res, next) {
         try {
-            // const { userId } = req.headers;
-            const userId = 1;
+            const { user_id: userId } = req.headers;
 
             let dataInventories = await Inventory.findAll({
                 where: {

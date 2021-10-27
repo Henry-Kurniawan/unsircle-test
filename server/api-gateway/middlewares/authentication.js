@@ -1,10 +1,8 @@
 const { verify } = require('../helpers/jwt');
-const { User } = require('../models')
 
 const authentication = async(req, res, next) => {
-    const token = req.headers.access_token
-
     try {
+        const token = req.headers.access_token
         if (token == null) {
             throw ({
                 name: "AUTHERROR",
@@ -14,12 +12,10 @@ const authentication = async(req, res, next) => {
         }
         const payload = verify(token)
 
-        console.log(payload)
-
-        req.user = {
-            id: foundUser.id,
-            email: foundUser.email,
-            role: foundUser.role
+        req.currentUser = {
+            id: payload.id,
+            email: payload.email,
+            permissions: payload.permissions
         }
         next()
     } catch (err) {
